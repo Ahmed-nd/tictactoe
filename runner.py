@@ -81,7 +81,7 @@ while True:
                 )
                 pygame.draw.rect(screen, white, rect, 3)
 
-                if board[i][j] != ttt.EMPTY:
+                if board[i][j] != ttt.Empty:
                     move = moveFont.render(board[i][j], True, white)
                     moveRect = move.get_rect()
                     moveRect.center = rect.center
@@ -96,9 +96,9 @@ while True:
         if game_over:
             winner = ttt.winner(board)
             if winner is None:
-                title = f"Game Over: Tie."
+                title = f"Tie."
             else:
-                title = f"Game Over: {winner} wins."
+                title = f"{winner} wins."
         elif user == player:
             title = f"Play as {user}"
         else:
@@ -124,7 +124,7 @@ while True:
             mouse = pygame.mouse.get_pos()
             for i in range(3):
                 for j in range(3):
-                    if board[i][j] == ttt.EMPTY and tiles[i][j].collidepoint(mouse):
+                    if (board[i][j] == ttt.Empty and tiles[i][j].collidepoint(mouse)):
                         board = ttt.result(board, (i, j))
 
         if game_over:
