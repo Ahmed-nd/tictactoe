@@ -2,7 +2,7 @@
 Tic Tac Toe Player
 """
 
-import math
+import math, copy
 
 X = "X"
 O = "O"
@@ -53,11 +53,12 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    WhoTurn = player(board)
+    new_board = copy.deepcopy(board)
+    WhoTurn = player(new_board)
     i, j = action
-    if board[i][j] is Empty:
-        board[i][j] = WhoTurn
-    return board
+    if new_board[i][j] is Empty:
+        new_board[i][j] = WhoTurn
+    return new_board
 
 
 def winner(board):
@@ -118,28 +119,52 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    max_action = float("-inf")
-    min_action = float("inf")
-    max_action = max_value(board)
+    if terminal(board):
+        return None
+
+    if board == initial_state():
+        return 1, 1
     
-    return max_action
+    WhoTurn = player(board)
+    optimal_value = float("-inf") if WhoTurn == X else float("inf")
 
-def value(board):
-    pass
-def max_value(board):
+    for action in actions(board):
+        new_value = minimax_value(result(board, action), optimal_value)
+
+        if WhoTurn == X:
+            new_value = max(optimal_value, new_value)
+
+        if WhoTurn == O:
+            new_value = min(optimal_value, new_value)
+
+        if new_value != optimal_value:
+            optimal_value = new_value
+            optimal_action = action
+
+    return optimal_action
+
+def minimax_value(board, optimal_value):
+
     if terminal(board):
         return utility(board)
-    v = float("-inf")
-    for action in actions(board):
-        v = max(v, min_value(result(board,action)))
-    return v
 
-def min_value(board):
-    if terminal(board):
-        return utility(board)
-    v = float("inf")
-    for action in actions(board):
-        v = min(v, max_value(result(board,action)))
-    return v
+    WhoTurn = player(board)
+    value = float("-inf") if WhoTurn == X else float("inf")
 
-print(minimax([[X, X, Empty],[Empty, Empty, Empty],[Empty, Empty, Empty]]))
+    for action in actions(board):
+        new_value = minimax_value(result(board, action), value)
+
+        if WhoTurn == X:
+            if new_value > optimal_value:
+                return new_value
+            value = max(value, new_value)
+
+        if WhoTurn == O:
+            if new_value < optimal_value:
+                return new_value
+            value = min(value, new_value)
+
+    return value
+
+
+# print(minimax([[X, X, Empty],[Empty, O, Empty],[Empty, Empty, Empty]]))

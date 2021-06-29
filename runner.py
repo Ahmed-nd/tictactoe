@@ -12,6 +12,7 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 
 screen = pygame.display.set_mode(size)
+pygame.display.set_caption('Tic-Tac-Toe game')
 
 mediumFont = pygame.font.Font("OpenSans-Regular.ttf", 28)
 largeFont = pygame.font.Font("OpenSans-Regular.ttf", 40)
@@ -96,9 +97,9 @@ while True:
         if game_over:
             winner = ttt.winner(board)
             if winner is None:
-                title = f"Tie."
+                title = f"Game Over: Tie."
             else:
-                title = f"{winner} wins."
+                title = f"Game Over: {winner} wins."
         elif user == player:
             title = f"Play as {user}"
         else:
@@ -114,6 +115,8 @@ while True:
                 time.sleep(0.5)
                 move = ttt.minimax(board)
                 board = ttt.result(board, move)
+                pygame.mixer.music.load('sounds/o-play.wav')
+                pygame.mixer.music.play(0)
                 ai_turn = False
             else:
                 ai_turn = True
@@ -126,6 +129,8 @@ while True:
                 for j in range(3):
                     if (board[i][j] == ttt.Empty and tiles[i][j].collidepoint(mouse)):
                         board = ttt.result(board, (i, j))
+                        pygame.mixer.music.load('sounds/x-play.wav')
+                        pygame.mixer.music.play(0)
 
         if game_over:
             againButton = pygame.Rect(width / 3, height - 65, width / 3, 50)
