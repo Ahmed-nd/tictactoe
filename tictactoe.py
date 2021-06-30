@@ -2,7 +2,7 @@
 Tic Tac Toe Player
 """
 
-import math, copy
+import math, copy, random
 
 X = "X"
 O = "O"
@@ -123,7 +123,10 @@ def minimax(board):
         return None
 
     if board == initial_state():
-        return 1, 1
+        # select random cell when it's empty
+        x = random.randint(0,2)
+        y = random.randint(0,2)
+        return x, y
     
     WhoTurn = player(board)
     optimal_value = float("-inf") if WhoTurn == X else float("inf")
@@ -134,7 +137,7 @@ def minimax(board):
         if WhoTurn == X:
             new_value = max(optimal_value, new_value)
 
-        if WhoTurn == O:
+        else:
             new_value = min(optimal_value, new_value)
 
         if new_value != optimal_value:
@@ -144,7 +147,11 @@ def minimax(board):
     return optimal_action
 
 def minimax_value(board, optimal_value):
+    """
+    Return the minimax value with Alpha-beta pruning for the current player on the board.
 
+    if minimax_value returns value 1, X plays optical and O plays optical, the X will win.
+    """
     if terminal(board):
         return utility(board)
 
@@ -155,16 +162,15 @@ def minimax_value(board, optimal_value):
         new_value = minimax_value(result(board, action), value)
 
         if WhoTurn == X:
+            # Alpha-beta pruning for the player X
             if new_value > optimal_value:
                 return new_value
             value = max(value, new_value)
 
-        if WhoTurn == O:
+        else:
+            # Alpha-beta pruning for the player O
             if new_value < optimal_value:
                 return new_value
             value = min(value, new_value)
 
     return value
-
-
-# print(minimax([[X, X, Empty],[Empty, O, Empty],[Empty, Empty, Empty]]))

@@ -5,7 +5,7 @@ import time
 import tictactoe as ttt
 
 pygame.init()
-size = width, height = 600, 400
+size = width, height = 700, 500
 
 # Colors
 black = (0, 0, 0)
@@ -68,7 +68,7 @@ while True:
     else:
 
         # Draw game board
-        tile_size = 80
+        tile_size = 100
         tile_origin = (width / 2 - (1.5 * tile_size),
                        height / 2 - (1.5 * tile_size))
         tiles = []
@@ -97,9 +97,9 @@ while True:
         if game_over:
             winner = ttt.winner(board)
             if winner is None:
-                title = f"Game Over: Tie."
+                title = f"Game Over : Tie"
             else:
-                title = f"Game Over: {winner} wins."
+                title = f"{winner} wins"
         elif user == player:
             title = f"Play as {user}"
         else:
